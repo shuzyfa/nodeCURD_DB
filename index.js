@@ -91,6 +91,28 @@ app.listen(port, () => {
 })
 
 
+app.get('/users', (req, res) => {
+
+        let Getusers = new authModel({
+
+            name: req.body.name,
+            number: req.body.number,
+            address: req.body.address,
+            email: req.body.email,
+            password: hash
+
+        })
+        userCreate.save()
+            .then((response) => {
+                res.status(200).send({ result: response, message: "Data Stored Sucessfully" })
+            })
+            .catch((error) => {
+                res.status(400).send({ result: error.message, message: "Data not stored" })
+            })
+
+})
+
+
 
 // console.log("My First  nide Program");
 
