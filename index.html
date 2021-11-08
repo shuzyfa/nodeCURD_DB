@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>CURD Operations</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div class="box">
+    <h1>CURD Operations</h1>
+</div>
+
+<div class="box" >
+    <h2>Add USER</h2>
+    <input type="text" name="Name" id="userName" placeholder="Full Name" required> <br>
+    <input type="email" name="email" id="userEmail" placeholder="Email" required><br>
+    <input type="text" name="addr" id="userAddr" placeholder="Address" required><br>
+    <input type="text" name="number" id="usernum" placeholder="Phone Number" required><br>
+    <input type="password" name="pass" id="userpass" placeholder="password" required><br>
+    <button type="submit" onclick="pushUser()">ADD USER</button><br>
+</div>
+<!-- 
+<div class="box" >
+    <h2>Update USER</h2>
+    <input type="number" name="id" id="userID" placeholder="User Id" required> <br>
+    <input type="text" name="Name" id="username" placeholder="Full Name"> <br>
+    <input type="email" name="email" id="useremail" placeholder="Email"><br>
+    <input type="text" name="addr" id="useraddr" placeholder="Address"><br>
+    <button type="submit" onclick="updateUser()">Update USER</button><br>
+</div>
+
+<div class="box" >
+    <h2>Delete USER</h2>
+    <input type="number" name="userid" id="userid" placeholder="User Id" required><br>
+    <button type="submit" onclick="deleteUser()">DELETE USER</button><br>
+
+</div>
+
+<div class="box" >
+    <h2>Display USER</h2>
+    <input type="number" name="userid" id="USERID" placeholder="User Id" required><br>
+    <button type="button" onclick="getUser()">GET USER</button><br><br><br>
+   
+    <table style="width:1000px">
+        <thead>
+            <tr>
+                <th colspan="3">Users DATA</th>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Address</th>
+            </tr>
+        </thead>
+<tbody id="taBody"></tbody>
+    </table>
+
+</div>
+
+
+<div class="box" >
+    <h2>Display All USERS</h2>
+    <button type="button" onclick="getUsers()">GET ALL USERS DATA </button><br><br><br>
+    <table style="width:1000px">
+        <thead>
+            <tr>
+                <th colspan="3">Users DATA</th>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Address</th>
+            </tr>
+
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</div>
+
+
+ -->
+
+
+<script>
+function getUsers(){
+
+    document.getElementById("table-body").innerHTML = "";
+    axios.get(`https://nodecurd4.herokuapp.com/users`)
+    .then(function (response) {
+                    // console.log(response.data);
+
+            let data = response.data;
+            var hello = document.getElementById("table-body");
+            for (var i in data) {
+
+                let rowData = data[i];
+                // console.log(rowData);
+                var tr = document.createElement('tr');
+                var td1 = document.createElement('td');
+                var td2 = document.createElement('td');
+                var td3 = document.createElement('td');
+                // var btnEdit = document.createElement('button');
+                // var btnClose  = document.createElement('button');
+                // btnEdit.appendChild(document.createTextNode("Edit"));
+                // btnClose.appendChild(document.createTextNode("Close"));
+                td1.appendChild(document.createTextNode(rowData.name));
+                td2.appendChild(document.createTextNode(rowData.email));
+                td3.appendChild(document.createTextNode(rowData.address));
+                tr.appendChild(td1)
+                tr.appendChild(td2)
+                tr.appendChild(td3)
+                // tr.appendChild(btnEdit);
+                // tr.appendChild(btnClose);
+                hello.appendChild(tr);
+
+            }
+
+
+                })
+
+}
+
+function getUser(){
+
+    const id = document.getElementById("USERID").value;
+    document.getElementById("taBody").innerHTML = "";
+    axios.get(`https://nodecurd4.herokuapp.com/user/`+id)
+    .then(function (response) {
+                    // console.log(response.data);
+
+                    let data = response.data;
+            var hello = document.getElementById("taBody");
+                var tr = document.createElement('tr');
+                var td1 = document.createElement('td');
+                var td2 = document.createElement('td');
+                var td3 = document.createElement('td');
+                td1.appendChild(document.createTextNode(data.name));
+                td2.appendChild(document.createTextNode(data.email));
+                td3.appendChild(document.createTextNode(data.address));
+                tr.appendChild(td1)
+                tr.appendChild(td2)
+                tr.appendChild(td3)
+                hello.appendChild(tr);
+                })
+
+}
+
+function  pushUser(){
+
+    const name = document.getElementById("userName").value;
+    const email = document.getElementById("userEmail").value;
+    const addr = document.getElementById("userAddr").value;
+    const number = document.getElementById("userNum").value;
+    const password = document.getElementById("userpass").value;
+    axios.post(`https://curd-db.herokuapp.com/signup`, {
+    name: name,
+    email: email,
+    number:number,
+    address: addr,
+    password:password
+  })
+  .then(function (response) {
+    alert(response.status+" User Sucessfully Added");
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+
+}
+
+
+function updateUser(){
+
+    // axios.put(`https://nodecurd4.herokuapp.com/user/`+id)
+    const id = document.getElementById("userID").value;
+    const name = document.getElementById("username").value;
+    const email = document.getElementById("useremail").value;
+    const addr = document.getElementById("useraddr").value;
+    axios.put(`https://nodecurd4.herokuapp.com/user/`+id, {
+    name: name,
+    email: email,
+    address: addr
+  })
+  .then(function (response) {
+    alert(response.status+" User Sucessfully Updated");
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+
+
+}
+
+function deleteUser(){
+    const id = document.getElementById("userid").value;
+
+    axios.delete(`https://nodecurd4.herokuapp.com/user/`+id)
+    .then(function(response){
+        alert(response.status+" User Sucessfully Deleted");
+    })
+
+}
+
+
+</script>
+</body>
+</html>
